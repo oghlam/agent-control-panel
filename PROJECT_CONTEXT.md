@@ -437,3 +437,10 @@ Verification completed:
 - Added `docs/architecture.svg`: dark-theme architecture diagram (users, event sources, Cloud Run backend internals, Vertex AI/ADK, Tool Gateway, MCP, Firestore, OAuth, deployment) embedded in README.
 - Added `docs/DEVPOST_SUBMISSION.md`: English Devpost text-description draft (pitch, features, tech, data sources, learnings), bonus-points checklist, pre-submission compliance checklist, and a 4-minute video shot list.
 - Deadline reference: Aug 31 2026 5:00 PM PDT. Remaining before submit: git repo push, frontend deploy (hosted URL), record video, optional bonus content.
+
+## 34. Video Assembly Plan (Pending User Footage)
+
+- User will deliver raw screen recordings per section of `docs/demo_video/VOICEOVER.md` (sign-in popup, Approve click, and any other human-only shots).
+- On delivery: mix user footage with the automated 80s walkthrough (`docs/demo_video/acp_demo_walkthrough.mp4`) into the final ≤4-minute English video per the shot list in `docs/DEVPOST_SUBMISSION.md`.
+- Assembly tool: local ffmpeg (available). Target: 1600×900/1080p, MP4 (H.264 + faststart), voice-over per VOICEOVER.md.
+- After mixing: upload to public YouTube/Vimeo, put the link in README Demo section and the Devpost form.
