@@ -1,0 +1,15 @@
+.git
+.gitignore
+.env
+backend/.env
+backend/.env.*
+venv
+__pycache__
+*.py[cod]
+.pytest_cache
+frontend
+node_modules
+.next
+README.md
+PROJECT_CONTEXT.md
+PROJECT_PROGRESS.md

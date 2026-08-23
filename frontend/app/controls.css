@@ -1,0 +1,170 @@
+.execution-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.filter-control,
+.page-limit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-control {
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.filter-control .label,
+.page-limit > span {
+  font-size: 9px;
+  letter-spacing: .11em;
+  line-height: 1;
+}
+
+.filter-control select,
+.page-limit select {
+  appearance: none;
+  min-height: 29px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  font: 10px "JetBrains Mono", monospace;
+  letter-spacing: .02em;
+  outline: none;
+  transition: border-color .15s ease, background .15s ease;
+}
+
+.filter-control select {
+  min-width: 142px;
+  padding: 0 27px 0 9px;
+}
+
+.page-limit select {
+  min-width: 48px;
+  padding: 0 21px 0 8px;
+}
+
+.filter-control::after,
+.page-limit::after {
+  content: "⌄";
+  position: absolute;
+  color: var(--cyan);
+  font-size: 13px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.filter-control::after {
+  right: 9px;
+  bottom: 8px;
+}
+
+.page-limit {
+  position: relative;
+}
+
+.page-limit::after {
+  right: 7px;
+  top: 8px;
+}
+
+.filter-control select:hover,
+.page-limit select:hover,
+.filter-control select:focus,
+.page-limit select:focus {
+  border-color: var(--cyan);
+  background: var(--hover);
+}
+
+.table-pagination {
+  gap: 12px;
+  min-height: 42px;
+}
+
+.pagination-summary {
+  color: var(--secondary);
+  white-space: nowrap;
+}
+
+.pagination-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg);
+}
+
+.pagination-actions .page-limit {
+  padding: 0 5px 0 2px;
+  border-right: 1px solid var(--border);
+}
+
+.pagination-actions .page-limit > span {
+  color: var(--muted);
+}
+
+.pagination-actions .btn {
+  min-height: 28px;
+  margin-left: 0;
+  border-color: transparent;
+  background: transparent;
+  color: var(--secondary);
+  padding: 0 9px;
+}
+
+.pagination-actions .btn:hover:not(:disabled) {
+  border-color: var(--border);
+  background: var(--hover);
+  color: var(--text);
+}
+
+.pagination-actions .btn:disabled {
+  background: transparent;
+}
+
+@media (max-width: 700px) {
+  .panel-head {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .execution-filters {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .execution-filters .table-search-wrap {
+    flex: 1;
+  }
+
+  .execution-filters .table-search {
+    width: 100%;
+  }
+
+  .table-pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .pagination-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 430px) {
+  .filter-control select {
+    min-width: 128px;
+  }
+
+  .pagination-actions .btn {
+    padding: 0 6px;
+  }
+}
