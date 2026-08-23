@@ -146,3 +146,7 @@ cd frontend && npm run build
 - Approval identity always comes from a verified Google token.
 - Credentials, `.env`, service-account JSON are excluded from images/git.
 - Backend image runs as non-root; CORS origin configurable via `FRONTEND_ORIGIN`.
+
+## License
+
+[MIT](LICENSE)
