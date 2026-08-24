@@ -21,4 +21,5 @@ next-env.d.ts
 docs/demo_video/seg_*
 docs/demo_video/oauth-login*.mp4
 docs/demo_video/*-narrated.mp4
+docs/demo_video/acp_demo_final_v1.mp4
 docs/demo_video/*.mp3
