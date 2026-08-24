@@ -134,7 +134,9 @@ The screenshots below follow the complete workflow from ingestion to audit.
 Automated walkthrough of the live Cloud Run deployment (lifecycle transitions
 driven by real Firestore writes): `docs/demo_video/acp_demo_walkthrough.mp4`.
 
-Final hackathon video: _to be added (YouTube link)_.
+Final hackathon video (≤4 min): `docs/demo_video/acp_demo_submission.mp4`
+(problem → value → architecture → GCP proof → live demo → audit/gateway/MCP →
+autonomy run → close).
 
 ## Installation
 

@@ -99,11 +99,14 @@ sliding-window rate limits enforced by the Tool Gateway.
 - [ ] No secrets/.env committed; `.gitignore` verified before push
 - [ ] Architecture diagram (`docs/architecture.svg`) linked/embedded in README
 - [ ] README.md spin-up instructions present (local + cloud)
-- [ ] Demo video ≤ 4 min, English, public YouTube/Vimeo link, shows Google Cloud proof (Cloud Run console, .run.app URL, Cloud Logging JSON logs)
+- [x] Demo video ≤ 4 min, English, shows Google Cloud proof (Cloud Run console, .run.app URL, Cloud Logging JSON logs) — final cut: `docs/demo_video/acp_demo_submission.mp4` (4:11); still needs upload to public YouTube/Vimeo link
 - [ ] All submission materials in English
 - [ ] Submit before Aug 31, 2026 5:00 PM PDT
 
 ## 4-minute video script (shot list)
+
+Final cut rendered: `docs/demo_video/acp_demo_submission.mp4` (4:11, 1920x1080).
+Voice-over script: `docs/demo_video/VOICEOVER.md`.
 
 | Time | Shot | Content |
 |------|------|---------|
