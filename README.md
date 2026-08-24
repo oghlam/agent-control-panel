@@ -138,6 +138,8 @@ Final hackathon video (≤4 min): `docs/demo_video/acp_demo_submission.mp4`
 (problem → value → architecture → GCP proof → live demo → audit/gateway/MCP →
 autonomy run → close).
 
+Watch on YouTube: https://youtu.be/jc5g__1-8Y0
+
 ## Installation
 
 Requirements: Python 3.12, Node.js.

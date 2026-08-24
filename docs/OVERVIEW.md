@@ -71,7 +71,7 @@ sliding-window rate limits.
 ## Try It
 
 - Backend (live): https://acp-backend-627792456859.us-central1.run.app
-- Demo video (4 min): `docs/demo_video/acp_demo_submission.mp4`
+- Demo video (4 min): https://youtu.be/jc5g__1-8Y0 (`docs/demo_video/acp_demo_submission.mp4`)
 - Local spin-up: see `README.md` (Installation)
 
 ## Documentation Map

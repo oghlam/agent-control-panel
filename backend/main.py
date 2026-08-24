@@ -109,11 +109,143 @@ class ToolPolicyUpdate(BaseModel):
     requires_approval: bool | None = None
 
 
+_AGENT = lambda name: {"type": "agent", "name": name}
+_HUMAN = lambda name: {"type": "human", "name": name}
+
 _SEED_EXECUTIONS = [
-    {"id": "#EXE-8F21", "name": "Generate customer quotation", "owner": "Gemini Agent", "status": "RUNNING", "progress": "42%", "tone": "success", "approval_status": "NOT_REQUIRED"},
-    {"id": "#EXE-8F20", "name": "Sync inventory availability", "owner": "Inventory Tool", "status": "WAITING", "progress": "78%", "tone": "warning", "approval_status": "NOT_REQUIRED"},
-    {"id": "#EXE-8F1C", "name": "Qualify inbound lead", "owner": "CRM Agent", "status": "RUNNING", "progress": "64%", "tone": "success", "approval_status": "NOT_REQUIRED"},
-    {"id": "#EXE-8F19", "name": "Send quotation email", "owner": "Gmail Tool", "status": "FAILED", "progress": "100%", "tone": "error", "approval_status": "NOT_REQUIRED"},
+    {
+        "id": "#EXE-9A31", "name": "Generate customer quotation", "owner": "Gemini Agent",
+        "status": "RUNNING", "progress": "42%", "tone": "success", "approval_status": "NOT_REQUIRED",
+        "events": [
+            ("CREATED", "Execution created from dashboard trigger", _HUMAN("demo@acp.dev")),
+            ("RUNNING", "Agent execution started · model gemini-2.5-flash", _AGENT("Gemini Agent")),
+            ("TOOL_CALL", "crm.lookup_customer(customer_id=\"CUS-10241\") → OK (230ms)", _AGENT("CRM Tool")),
+            ("RUNNING", "Composing quotation draft with pricing tier ENTERPRISE", _AGENT("Gemini Agent")),
+        ],
+    },
+    {
+        "id": "#EXE-9A30", "name": "Approve enterprise discount request", "owner": "Approval Router",
+        "status": "WAITING_APPROVAL", "progress": "65%", "tone": "warning", "approval_status": "PENDING",
+        "events": [
+            ("CREATED", "Discount request 32% exceeds auto-approve threshold (15%)", _AGENT("Approval Router")),
+            ("POLICY_CHECK", "Tool policy 'pricing.apply_discount' requires human-in-the-loop", _AGENT("Policy Engine")),
+            ("WAITING_APPROVAL", "Execution is waiting for human approval", {"type": "system"}),
+        ],
+    },
+    {
+        "id": "#EXE-9A2F", "name": "Sync inventory availability", "owner": "Inventory Tool",
+        "status": "COMPLETED", "progress": "100%", "tone": "success", "approval_status": "APPROVED",
+        "result": "1,248 SKUs synced across 3 warehouses in 4.2s. 12 items flagged low-stock.",
+        "events": [
+            ("CREATED", "Scheduled sync triggered by cron */30 * * * *", {"type": "system"}),
+            ("APPROVED", "Auto-approved: operation is read-only", _AGENT("Policy Engine")),
+            ("RUNNING", "Agent execution started", _AGENT("Inventory Tool")),
+            ("TOOL_CALL", "inventory.bulk_sync(warehouses=[WH-1, WH-2, WH-3]) → OK (4.2s)", _AGENT("Inventory Tool")),
+            ("COMPLETED", "Agent execution completed", _AGENT("Inventory Tool")),
+        ],
+    },
+    {
+        "id": "#EXE-9A2E", "name": "Process Email: Inquiry: Solar Panels Quotation for PT Nusantara",
+        "owner": "Simulated IMAP Worker (sales@nusantara.co.id)",
+        "status": "WAITING_APPROVAL", "progress": "0%", "tone": "warning", "approval_status": "PENDING",
+        "events": [
+            ("EMAIL_INGESTED", "Inbound email fetched from IMAP. Target workflow: quotation_generation_workflow.", _AGENT("IMAP Daemon")),
+            ("CLASSIFIED", "Intent=quotation_request · confidence=0.94 · routed to Gemini Agent", _AGENT("Classifier")),
+            ("WAITING_APPROVAL", "Execution is waiting for human approval", {"type": "system"}),
+        ],
+    },
+    {
+        "id": "#EXE-9A2D", "name": "Qualify inbound lead", "owner": "CRM Agent",
+        "status": "COMPLETED", "progress": "100%", "tone": "success", "approval_status": "NOT_REQUIRED",
+        "result": "Lead score 87/100 — company size ENTERPRISE, budget signal detected. Routed to Enterprise sales pod.",
+        "events": [
+            ("CREATED", "Webhook lead captured from landing page form", _AGENT("HubSpot CRM Webhook")),
+            ("RUNNING", "Agent execution started", _AGENT("CRM Agent")),
+            ("TOOL_CALL", "crm.enrich_contact(email=\"rina@nusantara.co.id\") → OK", _AGENT("CRM Tool")),
+            ("COMPLETED", "Scoring finished · lead qualified as HOT", _AGENT("CRM Agent")),
+        ],
+    },
+    {
+        "id": "#EXE-9A2C", "name": "Send quotation email", "owner": "Gmail Tool",
+        "status": "FAILED", "progress": "100%", "tone": "error", "approval_status": "NOT_REQUIRED",
+        "error": "SMTP relay rejected recipient domain nusantara.co.id (554 5.7.1 persistent transient failure) after 3 retries.",
+        "events": [
+            ("CREATED", "Chained from execution #EXE-9A2D", _AGENT("Orchestrator")),
+            ("RUNNING", "Agent execution started", _AGENT("Gmail Tool")),
+            ("TOOL_CALL", "gmail.send(to=\"purchasing@nusantara.co.id\") → ERROR 554", _AGENT("Gmail Tool")),
+            ("RETRY", "Retry 1/3 failed · backing off 8s", {"type": "system"}),
+            ("FAILED", "SMTP relay rejected recipient domain nusantara.co.id (554)", {"type": "system"}),
+        ],
+    },
+    {
+        "id": "#EXE-9A2B", "name": "Sync CRM: Budi Santoso (PT Maju Jaya)", "owner": "HubSpot CRM Webhook",
+        "status": "QUEUED", "progress": "0%", "tone": "info", "approval_status": "NOT_REQUIRED",
+        "events": [
+            ("WEBHOOK_INGESTED", "HubSpot event contact.propertyChange received for budi@majujaya.co.id", _AGENT("HubSpot CRM Webhook")),
+            ("QUEUED", "Waiting for worker slot (queue depth 1)", {"type": "system"}),
+        ],
+    },
+    {
+        "id": "#EXE-9A2A", "name": "Generate monthly SLA compliance report", "owner": "Reporting Agent",
+        "status": "COMPLETED", "progress": "100%", "tone": "success", "approval_status": "APPROVED",
+        "result": "SLA adherence 99.2% across 14 workflows. Report exported to gs://acp-reports/2026/08/sla.pdf",
+        "events": [
+            ("CREATED", "Monthly report job scheduled", {"type": "system"}),
+            ("APPROVED", "Approved by ops@acp.dev via control plane", _HUMAN("ops@acp.dev")),
+            ("RUNNING", "Aggregating execution metrics from Firestore", _AGENT("Reporting Agent")),
+            ("COMPLETED", "Report generated and exported to GCS", _AGENT("Reporting Agent")),
+        ],
+    },
+    {
+        "id": "#EXE-9A29", "name": "Reconcile payment gateway ledger", "owner": "Finance Tool",
+        "status": "RUNNING", "progress": "81%", "tone": "success", "approval_status": "NOT_REQUIRED",
+        "events": [
+            ("CREATED", "End-of-day reconciliation job enqueued", {"type": "system"}),
+            ("RUNNING", "Agent execution started", _AGENT("Finance Tool")),
+            ("TOOL_CALL", "ledger.fetch_transactions(date=2026-08-23) → 4,311 rows", _AGENT("Finance Tool")),
+            ("RUNNING", "Matching settlements against bank statement (81%)", _AGENT("Finance Tool")),
+        ],
+    },
+    {
+        "id": "#EXE-9A28", "name": "Rotate API credentials for MCP gateway", "owner": "Security Agent",
+        "status": "CANCELLED", "progress": "35%", "tone": "info", "approval_status": "REJECTED",
+        "events": [
+            ("CREATED", "Credential rotation window opened (90-day policy)", _AGENT("Security Agent")),
+            ("RUNNING", "Generating replacement keys for 6 registered tools", _AGENT("Security Agent")),
+            ("REJECTED", "Rejected by secops@acp.dev — defer until maintenance window Sat 02:00 WIB", _HUMAN("secops@acp.dev")),
+            ("CANCELLED", "Execution cancelled, changes rolled back", {"type": "system"}),
+        ],
+    },
+    {
+        "id": "#EXE-9A27", "name": "Draft follow-up sequence for webinar leads", "owner": "Gemini Agent",
+        "status": "QUEUED", "progress": "0%", "tone": "info", "approval_status": "NOT_REQUIRED",
+        "events": [
+            ("CREATED", "142 new leads imported from webinar platform", _HUMAN("marketing@acp.dev")),
+            ("QUEUED", "Waiting for worker slot (queue depth 2)", {"type": "system"}),
+        ],
+    },
+    {
+        "id": "#EXE-9A26", "name": "Scrape competitor pricing matrix", "owner": "Research Agent",
+        "status": "FAILED", "progress": "100%", "tone": "error", "approval_status": "NOT_REQUIRED",
+        "error": "Rate limited by source (HTTP 429) after 3 retries. Circuit breaker opened for competitor-prices tool.",
+        "events": [
+            ("CREATED", "Weekly competitive intelligence run", {"type": "system"}),
+            ("RUNNING", "Agent execution started", _AGENT("Research Agent")),
+            ("TOOL_CALL", "http.get(competitor-pricing.example.com) → 429 Too Many Requests", _AGENT("Research Agent")),
+            ("RETRY", "Retry 3/3 failed · circuit breaker OPEN", {"type": "system"}),
+            ("FAILED", "Rate limited by source (HTTP 429). Tool disabled for 15 minutes.", {"type": "system"}),
+        ],
+    },
+    {
+        "id": "#EXE-9A25", "name": "Provision read-only BigQuery access for external auditor",
+        "owner": "IAM Agent",
+        "status": "WAITING_APPROVAL", "progress": "10%", "tone": "warning", "approval_status": "PENDING",
+        "events": [
+            ("CREATED", "Access request AUD-2026-0041 submitted via portal", _HUMAN("audit@partner.co")),
+            ("POLICY_CHECK", "Grant scope validated: dataset acp_analytics.*, role roles/bigquery.dataViewer", _AGENT("Policy Engine")),
+            ("WAITING_APPROVAL", "Execution is waiting for human approval", {"type": "system"}),
+        ],
+    },
 ]
 _VALID_STATUSES = {"QUEUED", "RUNNING", "WAITING_APPROVAL", "COMPLETED", "FAILED", "CANCELLED"}
 _VALID_DECISIONS = {"APPROVED", "REJECTED"}
@@ -124,15 +256,26 @@ def get_execution_collection() -> firestore.CollectionReference:
     return firestore.Client(project=settings.project_id).collection("executions")
 
 
-def seed_executions() -> None:
+def seed_executions(force: bool = False) -> None:
     collection = get_execution_collection()
-    if next(collection.limit(1).stream(), None) is not None:
+    if not force and next(collection.limit(1).stream(), None) is not None:
         return
+    if force:
+        for snapshot in collection.stream():
+            for event in snapshot.reference.collection("events").stream():
+                event.reference.delete()
+            snapshot.reference.delete()
     client = firestore.Client(project=settings.project_id)
     batch = client.batch()
     now = time()
     for index, execution in enumerate(_SEED_EXECUTIONS):
-        batch.set(collection.document(execution["id"]), {**execution, "created_at": now - index})
+        document = {key: value for key, value in execution.items() if key != "events"}
+        batch.set(collection.document(execution["id"]), {**document, "created_at": now - index * 240})
+        for event_index, (event_type, message, actor) in enumerate(execution.get("events", [])):
+            batch.set(
+                collection.document(execution["id"]).collection("events").document(),
+                {"type": event_type, "message": message, "actor": actor, "created_at": now - index * 240 + event_index},
+            )
     batch.commit()
 
 
@@ -457,6 +600,16 @@ async def execution_counts() -> dict:
         "completed": completed,
         "failed": failed,
         "total": len(snapshots)
+    }
+
+
+@app.post("/api/executions/demo-seed")
+async def demo_seed() -> dict:
+    seed_executions(force=True)
+    return {
+        "status": "ok",
+        "message": "Demo dataset reseeded",
+        "count": len(_SEED_EXECUTIONS),
     }
 
 

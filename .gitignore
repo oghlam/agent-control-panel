@@ -16,3 +16,9 @@ next-env.d.ts
 
 # Tooling
 .continue/
+
+# Raw/intermediate demo footage (only final cuts are tracked)
+docs/demo_video/seg_*
+docs/demo_video/oauth-login*.mp4
+docs/demo_video/*-narrated.mp4
+docs/demo_video/*.mp3

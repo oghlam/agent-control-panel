@@ -444,3 +444,9 @@ Verification completed:
 - On delivery: mix user footage with the automated 80s walkthrough (`docs/demo_video/acp_demo_walkthrough.mp4`) into the final ≤4-minute English video per the shot list in `docs/DEVPOST_SUBMISSION.md`.
 - Assembly tool: local ffmpeg (available). Target: 1600×900/1080p, MP4 (H.264 + faststart), voice-over per VOICEOVER.md.
 - After mixing: upload to public YouTube/Vimeo, put the link in README Demo section and the Devpost form.
+
+## 35. Final Video Published to YouTube
+
+- Final cut `docs/demo_video/acp_demo_submission.mp4` (4:11) uploaded to YouTube: https://youtu.be/jc5g__1-8Y0 ("Agent Control Plane — Autonomy Needs Governance | BLAZ LABS").
+- Docs updated with the link: `README.md` (Demo section), `docs/OVERVIEW.md` (Try It), `docs/DEVPOST_SUBMISSION.md` (pre-submission compliance checklist — video item now fully checked off).
+- Remaining before Devpost submit: git repo push, optional bonus content. Frontend deployed: https://acp-frontend-627792456859.us-central1.run.app; backend live: https://acp-backend-627792456859.us-central1.run.app.

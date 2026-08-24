@@ -80,7 +80,7 @@ sliding-window rate limits enforced by the Tool Gateway.
 
 ## Testing instructions
 
-- Hosted URL: _(add after frontend deploy)_ — backend:
+- Hosted URL: https://acp-frontend-627792456859.us-central1.run.app — backend:
   https://acp-backend-627792456859.us-central1.run.app
 - Sign in with any Google account; create an execution; approve it; watch the
   ADK runner complete it and open the Trace dropdown to inspect the audit trail.
@@ -99,7 +99,7 @@ sliding-window rate limits enforced by the Tool Gateway.
 - [ ] No secrets/.env committed; `.gitignore` verified before push
 - [ ] Architecture diagram (`docs/architecture.svg`) linked/embedded in README
 - [ ] README.md spin-up instructions present (local + cloud)
-- [x] Demo video ≤ 4 min, English, shows Google Cloud proof (Cloud Run console, .run.app URL, Cloud Logging JSON logs) — final cut: `docs/demo_video/acp_demo_submission.mp4` (4:11); still needs upload to public YouTube/Vimeo link
+- [x] Demo video ≤ 4 min, English, shows Google Cloud proof (Cloud Run console, .run.app URL, Cloud Logging JSON logs) — final cut: `docs/demo_video/acp_demo_submission.mp4` (4:11); public YouTube link: https://youtu.be/jc5g__1-8Y0
 - [ ] All submission materials in English
 - [ ] Submit before Aug 31, 2026 5:00 PM PDT
 
